@@ -42,14 +42,6 @@ import re
 from constants import *
 
 
-
-# TODO : creer une première etape dans la création du CSV après le grab fake links mais avant le reveal true links...
-# ... afin de ne pas interroger le serveur du site scrappé si le true link existe déjà
-# + interroger au contraire le site scrappé SI la key existe ET que ce lien est None
-# ... *OU* si aucune entrée n'existe
-# TODO : remplacer l'url unique par une liste d'url a parser
-
-
 # FUNCTIONS ------------------------------------------------------------------------------------------------------------
 
 # cooking of a delicious soup with Beautiful Soup
@@ -86,10 +78,11 @@ def reveal_true_links(dictionary_of_links):
                 print(response.status_code, response.url)
             print("Final destination:")
             print(r.status_code, r.url)
-            if "google" in r.url == False:
-                value.append(r.url)
-            else:
+            ## TODO : tester condition if "google" (jeu d'essai ou live)
+            if "google" in r.url:
                 value.append('None')
+            else:
+                value.append(r.url)
             print(dictionary_of_links)
         else:
             print("Request was not redirected")
@@ -118,10 +111,8 @@ def write_csv_file(dictionary_of_links):
 
 # SCRIPT ---------------------------------------------------------------------------------------------------------------
 
-soup = soup_cooking(URL)
-
-dictionary_of_links = grab_fake_links(soup)
-
-dictionary_of_links_v2 = reveal_true_links(dictionary_of_links)
-
-write_csv_file(dictionary_of_links_v2)
+for url in URLS:
+    soup = soup_cooking(url)
+    dictionary_of_links = grab_fake_links(soup)
+    dictionary_of_links_v2 = reveal_true_links(dictionary_of_links)
+    write_csv_file(dictionary_of_links_v2)
