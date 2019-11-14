@@ -78,7 +78,6 @@ def reveal_true_links(dictionary_of_links):
                 print(response.status_code, response.url)
             print("Final destination:")
             print(r.status_code, r.url)
-            ## TODO : tester condition if "google" (jeu d'essai ou live)
             if "google" in r.url:
                 value.append('None')
             else:
